@@ -8,6 +8,19 @@ class Hello extends Component {
   }
 }
 
+class Text extends Component {
+  render() {
+    const textoSegundoBool = this.props.isActivated ? "On" : "Off";
+    const mappedNumbers = this.props.arrayOfNumbers.map(n => n * 2);
+    return (
+      <div>
+        <p>{mappedNumbers.join(", ")}</p>
+        <p>{this.props.objectWithInfo.key}</p>
+      </div>
+    );
+  }
+}
+
 class App extends Component {
   render() {
     return (
@@ -16,8 +29,13 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <Hello title="Hello from props" />
         </header>
-        <h3>Vamos a aprender React</h3>
-        <p>Hola mundo, estoy usando React</p>
+        <Text
+          arrayOfNumbers={[2, 3, 10]}
+          isActivated
+          number={2}
+          objectWithInfo={{ key: "First Value", key2: "otherValue" }}
+          text="Texto en string"
+        />
       </div>
     );
   }
