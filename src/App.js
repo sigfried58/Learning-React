@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
-function Hello(props) {
-  return <h2>{props.title}</h2>;
+class Hello extends Component {
+  render() {
+    return <h2>{this.props.title}</h2>;
+  }
 }
 
 class App extends Component {
