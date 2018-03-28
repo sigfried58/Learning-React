@@ -10,12 +10,14 @@ class Hello extends Component {
 
 class Text extends Component {
   render() {
-    const { arrayOfNumbers, multiply, objectWithInfo, title } = this.props;
+    const { arrayOfNumbers, multiply, objectWithInfo } = this.props;
+
+    this.props.title = <h3>Otra cosa</h3>;
 
     const mappedNumbers = arrayOfNumbers.map(multiply);
     return (
       <div>
-        {title}
+        {this.props.title}
         <p>{mappedNumbers.join(", ")}</p>
         <p>{objectWithInfo.key}</p>
       </div>
