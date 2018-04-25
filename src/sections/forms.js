@@ -1,23 +1,25 @@
 import React, { Component } from 'react';
 
 export default class Forms extends Component {
-  handleClick(e) {
+  handleClick = e => {
     e.preventDefault(); //Para evitar que el boton haga submit
-    const name = document.getElementById('name').value;
+    // const name = document.getElementById('name').value;
+    const name = this.inputName.value;
     const email = document.getElementById('twitter').value;
     console.log({ name, email });
-  }
+  };
   render() {
     return (
       <div>
         <h4>Formularios</h4>
         <form>
           <p>
-            <label>Nombre:</label>
+            <label htmlFor="name">Nombre:</label>
             <input
               id="name"
               name="userName"
               placeholder="Introduce el nombre"
+              ref={inputElement => (this.inputName = inputElement)}
             />
           </p>
 
