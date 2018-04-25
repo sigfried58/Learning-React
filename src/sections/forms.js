@@ -1,18 +1,24 @@
 import React, { Component } from 'react';
 
 export default class Forms extends Component {
+  constructor() {
+    super();
+    this.state = {
+      inputName: '',
+      inputTwitter: '@',
+      inputTerms: true
+    };
+  }
   handleSubmit = e => {
     e.preventDefault(); //Para evitar que el boton haga submit
-    // const name = document.getElementById('name').value;
-    const name = this.inputName.value;
-    const email = document.getElementById('twitter').value;
-    console.log({ name, email });
+    console.log(this.state);
   };
 
-  handleChange(e) {
+  handleChange = e => {
     console.log('handleChange');
     console.log(e.target.checked);
-  }
+    this.setState({ inputTerms: e.target.checked });
+  };
 
   render() {
     return (
@@ -26,6 +32,8 @@ export default class Forms extends Component {
               name="userName"
               placeholder="Introduce el nombre"
               ref={inputElement => (this.inputName = inputElement)}
+              onChange={e => this.setState({ inputName: e.target.value })}
+              value={this.state.inputName}
             />
           </p>
 
@@ -35,12 +43,18 @@ export default class Forms extends Component {
               id="twitter"
               name="twitterAccount"
               placeholder="Introduce tu Twitter"
+              onChange={e => this.setState({ inputTwitter: e.target.value })}
+              value={this.state.inputTwitter}
             />
           </p>
 
           <p>
             <label>
-              <input onChange={this.handleChange} type="checkbox" />
+              <input
+                onChange={this.handleChange}
+                type="checkbox"
+                checked={this.state.inputTerms}
+              />
               Accepted terms
             </label>
           </p>
