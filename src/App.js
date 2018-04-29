@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 class Article extends Component {
   static propTypes = {
-    author: PropTypes.string
+    author: PropTypes.string.isRequired
   };
 
   render() {
