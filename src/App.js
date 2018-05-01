@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+
+const HelloRender = props => <h1>Hola render!</h1>;
 
 class App extends Component {
   constructor(props) {
@@ -15,11 +17,28 @@ class App extends Component {
   render() {
     console.log('render');
     return (
-      <div className="App">
-        <h4>Ciclo de montaje: componentWillMount</h4>
-        {this.state.mensaje}
-      </div>
+      <Fragment>
+        <h1>Primer elemento</h1>
+        <HelloRender />
+        <HelloRender />
+        <h3>Cuarto elemento</h3>
+      </Fragment>
     );
+
+    /* return [
+      <h1 key="A">Primer elemento</h1>,
+      <HelloRender key="B" />,
+      <HelloRender key="C" />,
+      <h3 key="D">Cuarto elemento</h3>
+    ]; */
+    /*return (
+      <div>
+        <h1>Primer elemento</h1>
+        <HelloRender />
+        <HelloRender />
+        <h3>Cuarto elemento</h3>
+      </div>
+    );*/
   }
 }
 
