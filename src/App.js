@@ -1,35 +1,53 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 
-//const HelloRender = props => <h1>Hola render!</h1>;
+const ANIMAL_IMAGES = {
+  cat: 'https://goo.gl/PoQQXb',
+  dolphin: 'https://goo.gl/BbiKCd',
+  panda: 'https://goo.gl/oNbtoq'
+};
 
-class App extends Component {
-  state = { bpi: {} };
-  componentDidMount() {
-    fetch('https://api.coindesk.com/v1/bpi/currentprice.json')
-      .then(res => res.json())
-      .then(data => {
-        const { bpi } = data;
-        this.setState({ bpi });
-      });
-  }
+class AnimalImage extends Component {
+  state = { src: ANIMAL_IMAGES[this.props.animal] };
 
-  _renderCurrencies() {
-    const { bpi } = this.state;
-    // Recorremos sus keys
-    const currencies = Object.keys(bpi); // Nos devuelve un array
-    return currencies.map(currency => (
-      <div key={currency}>
-        1 BTC is {bpi[currency].rate}
-        <span>{currency}</span>
-      </div>
-    ));
+  componentWillReceiveProps(nextProps) {
+    if (this.props.animal !== nextProps.animal) {
+      this.setState({ src: ANIMAL_IMAGES[nextProps.animal] });
+    }
   }
 
   render() {
     return (
+      <div>
+        <p>Selected {this.props.animal}</p>
+        <img alt={this.props.animal} src={this.state.src} width="250" />
+      </div>
+    );
+  }
+}
+
+AnimalImage.propTypes = {
+  animal: PropTypes.oneOf(['cat', 'dolphin', 'panda'])
+};
+
+AnimalImage.defaultProps = {
+  animal: 'panda'
+};
+
+class App extends Component {
+  state = { animal: 'panda' };
+  render() {
+    return (
       <Fragment>
-        <h1>Bitcoin Price Index</h1>
-        {this._renderCurrencies()}
+        <h1>Ciclo de Actualización, Ejemplo de: ComponentWillReceiveProps</h1>
+        <button onClick={() => this.setState({ animal: 'panda' })}>
+          Panda
+        </button>
+        <button onClick={() => this.setState({ animal: 'cat' })}>Cat</button>
+        <button onClick={() => this.setState({ animal: 'dolphin' })}>
+          Dolphin
+        </button>
+        <AnimalImage animal={this.state.animal} />
       </Fragment>
     );
   }
