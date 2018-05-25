@@ -2,10 +2,12 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 const ANIMAL_IMAGES = {
+  panda: 'https://goo.gl/oNbtoq',
   cat: 'https://goo.gl/PoQQXb',
-  dolphin: 'https://goo.gl/BbiKCd',
-  panda: 'https://goo.gl/oNbtoq'
+  dolphin: 'https://goo.gl/BbiKCd'
 };
+
+const ANIMALS = Object.keys(ANIMAL_IMAGES);
 
 class AnimalImage extends Component {
   state = { src: ANIMAL_IMAGES[this.props.animal] };
@@ -27,26 +29,29 @@ class AnimalImage extends Component {
 }
 
 AnimalImage.propTypes = {
-  animal: PropTypes.oneOf(['cat', 'dolphin', 'panda'])
-};
-
-AnimalImage.defaultProps = {
-  animal: 'panda'
+  animal: PropTypes.oneOf(ANIMALS)
 };
 
 class App extends Component {
   state = { animal: 'panda' };
+
+  _renderAnimalButton = animal => {
+    return (
+      <button
+        disabled={animal === this.state.animal}
+        key={animal}
+        onClick={() => this.setState({ animal })}
+      >
+        {animal}
+      </button>
+    );
+  };
+
   render() {
     return (
       <Fragment>
         <h1>Ciclo de Actualización, Ejemplo de: ComponentWillReceiveProps</h1>
-        <button onClick={() => this.setState({ animal: 'panda' })}>
-          Panda
-        </button>
-        <button onClick={() => this.setState({ animal: 'cat' })}>Cat</button>
-        <button onClick={() => this.setState({ animal: 'dolphin' })}>
-          Dolphin
-        </button>
+        {ANIMALS.map(this._renderAnimalButton)}
         <AnimalImage animal={this.state.animal} />
       </Fragment>
     );
