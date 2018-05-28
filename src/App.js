@@ -1,4 +1,4 @@
-import React, { Component, PureComponent, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 const ANIMAL_IMAGES = {
@@ -9,14 +9,41 @@ const ANIMAL_IMAGES = {
 
 const ANIMALS = Object.keys(ANIMAL_IMAGES);
 
-class AnimalImage extends PureComponent {
+class AnimalImage extends Component {
   state = { src: ANIMAL_IMAGES[this.props.animal] };
 
   componentWillReceiveProps(nextProps) {
+    console.clear();
     console.log('1.-componentWillReceiveProps');
     if (this.props.animal !== nextProps.animal) {
       this.setState({ src: ANIMAL_IMAGES[nextProps.animal] });
     }
+  }
+
+  shouldComponentUpdate(nextProps) {
+    console.log('2.-shouldComponentUpdate');
+    return this.props.animal !== nextProps.animal;
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    console.log('3.-componentWillUpdate', nextProps, nextState);
+    const img = document.querySelector('img');
+    console.log('from img element', { alt: img.alt });
+    // Web animations api
+    img.animate(
+      [
+        {
+          filter: 'blur(0px)'
+        },
+        {
+          filter: 'blur(2px)'
+        }
+      ],
+      {
+        duration: 500,
+        easing: 'ease'
+      }
+    );
   }
 
   render() {
