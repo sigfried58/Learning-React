@@ -1,109 +1,47 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 
-const ANIMAL_IMAGES = {
-  panda: 'https://goo.gl/oNbtoq',
-  cat: 'https://goo.gl/PoQQXb',
-  dolphin: 'https://goo.gl/BbiKCd'
-};
+class ComponenteADesmontar extends Component {
+  state = { windowWidth: 0 };
 
-const ANIMALS = Object.keys(ANIMAL_IMAGES);
+  _updateStateWithWindowWidth = () => {
+    this.setState({ windowWidth: document.body.clientWidth });
+  };
 
-class AnimalImage extends Component {
-  state = { src: ANIMAL_IMAGES[this.props.animal] };
-
-  componentWillReceiveProps(nextProps) {
-    console.clear();
-    console.log('1.-componentWillReceiveProps');
-    if (this.props.animal !== nextProps.animal) {
-      this.setState({ src: ANIMAL_IMAGES[nextProps.animal] });
-    }
+  componentDidMount() {
+    this._updateStateWithWindowWidth();
+    window.addEventListener('resize', this._updateStateWithWindowWidth);
   }
 
-  shouldComponentUpdate(nextProps) {
-    console.log('2.-shouldComponentUpdate');
-    return this.props.animal !== nextProps.animal;
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    console.log('3.-componentWillUpdate', nextProps, nextState);
-    const img = document.querySelector('img');
-    console.log('from img element', { alt: img.alt });
-    // Web animations api
-    img.animate(
-      [
-        {
-          filter: 'blur(0px)'
-        },
-        {
-          filter: 'blur(2px)'
-        }
-      ],
-      {
-        duration: 500,
-        easing: 'ease'
-      }
-    );
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    console.log('4. componentDidUpdate');
-    const img = document.querySelector('img');
-    img.animate(
-      [
-        {
-          filter: 'blur(2px)'
-        },
-        {
-          filter: 'blur(0px)'
-        }
-      ],
-      {
-        duration: 1500,
-        easing: 'ease'
-      }
-    );
-    console.log('from img element', { alt: img.alt });
+  componentWillUnmount() {
+    console.log('ComponentWillUnmount');
+    window.removeEventListener('resize', this._updateStateWithWindowWidth);
   }
 
   render() {
     console.log('render 🦄');
     return (
       <div>
-        <p>Selected {this.props.animal}</p>
-        <img alt={this.props.animal} src={this.state.src} width="250" />
+        <p>Ancho de la ventana: {this.state.windowWidth}</p>
       </div>
     );
   }
 }
 
-AnimalImage.propTypes = {
-  animal: PropTypes.oneOf(ANIMALS)
-};
-
 class App extends Component {
-  state = { animal: 'panda' };
-
-  _renderAnimalButton = animal => {
-    return (
-      <button
-        //disabled={animal === this.state.animal}
-        key={animal}
-        onClick={() => this.setState({ animal })}
-      >
-        {animal}
-      </button>
-    );
-  };
-
+  state = { mostrarComponente: true };
   render() {
-    return (
-      <Fragment>
-        <h1>Ciclo de Actualización, Ejemplo de: ShouldComponentUpdate</h1>
-        {ANIMALS.map(this._renderAnimalButton)}
-        <AnimalImage animal={this.state.animal} />
-      </Fragment>
-    );
+    if (this.state.mostrarComponente) {
+      return (
+        <Fragment>
+          <h1>Ciclo de desmontaje: componentWillUnmount</h1>
+          <ComponenteADesmontar />
+          <button onClick={() => this.setState({ mostrarComponente: false })}>
+            Desmontar componente
+          </button>
+        </Fragment>
+      );
+    }
+    return <p>Componente desmontado</p>;
   }
 }
 
