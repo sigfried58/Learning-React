@@ -1,31 +1,30 @@
 import React, { Component, Fragment } from 'react';
 
 class Button extends Component {
-  constructor(props) {
-    super(props);
-    this.borderColor = '#09f';
-  }
   render() {
     return (
-      <button style={{ borderColor: this.borderColor, display: 'block' }}>
+      <button style={{ borderColor: this.props.borderColor, display: 'block' }}>
         {this.props.label}
       </button>
     );
   }
 }
 
-class ButtonDanger extends Button {
-  constructor(props) {
-    super(props);
-    this.borderColor = 'red';
+Button.defaultProps = {
+  borderColor: '#09f'
+};
+
+class ButtonDanger extends Component {
+  render() {
+    return <Button borderColor="red" label={this.props.label} />;
   }
 }
 
-class ButtonWithLegend extends Button {
+class ButtonWithLegend extends Component {
   render() {
     return (
       <div>
-        {super.render()}
+        <Button borderColor={this.props.borderColor} label={this.props.label} />
         <small>{this.props.legend}</small>
       </div>
     );
