@@ -1,47 +1,50 @@
 import React, { Component, Fragment } from 'react';
 
-class ComponenteADesmontar extends Component {
-  state = { windowWidth: 0 };
-
-  _updateStateWithWindowWidth = () => {
-    this.setState({ windowWidth: document.body.clientWidth });
-  };
-
-  componentDidMount() {
-    this._updateStateWithWindowWidth();
-    window.addEventListener('resize', this._updateStateWithWindowWidth);
-  }
-
-  componentWillUnmount() {
-    console.log('ComponentWillUnmount');
-    window.removeEventListener('resize', this._updateStateWithWindowWidth);
-  }
+class BotonQueLanzaError extends Component {
+  state = { throwError: false };
 
   render() {
-    console.log('render 🦄');
+    if (this.state.throwError) {
+      throw new Error('Error lanzado por el botón');
+    }
     return (
-      <div>
-        <p>Ancho de la ventana: {this.state.windowWidth}</p>
-      </div>
+      <button onClick={() => this.setState({ throwError: true })}>
+        Lanzar error!
+      </button>
     );
   }
 }
 
 class App extends Component {
-  state = { mostrarComponente: true };
+  state = { hasError: false, errorMsg: '' };
+
+  componentDidCatch(error, info) {
+    console.log('componentDidCatch');
+    console.log({ error, info });
+    this.setState({ hasError: true, errorMsg: error.toString() });
+  }
+
   render() {
-    if (this.state.mostrarComponente) {
+    if (this.state.hasError) {
       return (
         <Fragment>
-          <h1>Ciclo de desmontaje: componentWillUnmount</h1>
-          <ComponenteADesmontar />
-          <button onClick={() => this.setState({ mostrarComponente: false })}>
-            Desmontar componente
+          <p>Error en el componente: {this.state.errorMsg}</p>
+          <button
+            onClick={() => {
+              this.setState({ hasError: false });
+            }}
+          >
+            Volver a la aplicación
           </button>
         </Fragment>
       );
     }
-    return <p>Componente desmontado</p>;
+    return (
+      <Fragment>
+        <h1>Ciclo de montaje: componentDidCatch</h1>
+        <BotonQueLanzaError />
+      </Fragment>
+    );
   }
 }
 
