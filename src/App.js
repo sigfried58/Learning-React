@@ -1,48 +1,50 @@
 import React, { Component, Fragment } from 'react';
 
-class BotonQueLanzaError extends Component {
-  state = { throwError: false };
-
+class Button extends Component {
+  constructor(props) {
+    super(props);
+    this.borderColor = '#09f';
+  }
   render() {
-    if (this.state.throwError) {
-      throw new Error('Error lanzado por el botón');
-    }
     return (
-      <button onClick={() => this.setState({ throwError: true })}>
-        Lanzar error!
+      <button style={{ borderColor: this.borderColor, display: 'block' }}>
+        {this.props.label}
       </button>
     );
   }
 }
 
-class App extends Component {
-  state = { hasError: false, errorMsg: '' };
-
-  componentDidCatch(error, info) {
-    console.log('componentDidCatch');
-    console.log({ error, info });
-    this.setState({ hasError: true, errorMsg: error.toString() });
+class ButtonDanger extends Button {
+  constructor(props) {
+    super(props);
+    this.borderColor = 'red';
   }
+}
 
+class ButtonWithLegend extends Button {
   render() {
-    if (this.state.hasError) {
-      return (
-        <Fragment>
-          <p>Error en el componente: {this.state.errorMsg}</p>
-          <button
-            onClick={() => {
-              this.setState({ hasError: false });
-            }}
-          >
-            Volver a la aplicación
-          </button>
-        </Fragment>
-      );
-    }
+    return (
+      <div>
+        {super.render()}
+        <small>{this.props.legend}</small>
+      </div>
+    );
+  }
+}
+
+class App extends Component {
+  render() {
     return (
       <Fragment>
-        <h1>Ciclo de montaje: componentDidCatch</h1>
-        <BotonQueLanzaError />
+        <h1>Composición vs Herencia</h1>
+        <Button label="Click aquí" />
+        <br />
+        <ButtonDanger label="Cuidado!!!" />
+        <br />
+        <ButtonWithLegend
+          label="Botón con explicación"
+          legend="Clicka el botón para hacer algo"
+        />
       </Fragment>
     );
   }
