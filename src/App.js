@@ -1,50 +1,88 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-class Button extends Component {
-  render() {
-    return (
-      <button style={{ borderColor: this.props.borderColor, display: 'block' }}>
-        {this.props.label}
-      </button>
-    );
-  }
+//class Article extends Component {
+//  render() {
+//    const { title, author, date, children } = this.props;
+//    return (
+//      <section style={{ borderBottom: '1px solid #000', marginBottom: 50 }}>
+//        <h2>{title}</h2>
+//        {author && (
+//          <p>
+//            <em>Escrito por {author}</em>
+//          </p>
+//        )}
+//        <date>{date}</date>
+//        <article>{children}</article>
+//      </section>
+//    );
+//  }
+//}
+
+function Article(props) {
+  return (
+    <section style={{ borderBottom: '1px solid #000', marginBottom: 50 }}>
+      <h2>{props.title}</h2>
+      {props.author && (
+        <p>
+          <em>Escrito por {props.author}</em>
+        </p>
+      )}
+      <date>{props.date}</date>
+      <article>{props.children}</article>
+    </section>
+  );
 }
 
-Button.defaultProps = {
-  borderColor: '#09f'
+Article.propTypes = {
+  title: PropTypes.string.isRequired,
+  author: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
+  children: PropTypes.any
 };
 
-class ButtonDanger extends Component {
-  render() {
-    return <Button borderColor="red" label={this.props.label} />;
-  }
-}
+//class Button extends Component {
+//  render() {
+//    return (
+//      <button style={{ borderColor: this.props.borderColor, display: 'block' }}>
+//        {this.props.label}
+//      </button>
+//    );
+//  }
+//}
 
-class ButtonWithLegend extends Component {
-  render() {
-    return (
-      <div>
-        <Button borderColor={this.props.borderColor} label={this.props.label} />
-        <small>{this.props.legend}</small>
-      </div>
-    );
-  }
-}
+const Button = ({ borderColor = 'red', label }) => (
+  <button style={{ borderColor, display: 'block' }}>{label}</button>
+);
+
+//Button.defaultProps = {
+//  borderColor: 'blue'
+//};
+
+Button.propTypes = {
+  borderColor: PropTypes.string,
+  label: PropTypes.string.isRequired
+};
 
 class App extends Component {
   render() {
     return (
-      <Fragment>
-        <h1>Composición vs Herencia</h1>
-        <Button label="Click aquí" />
-        <br />
-        <ButtonDanger label="Cuidado!!!" />
-        <br />
-        <ButtonWithLegend
-          label="Botón con explicación"
-          legend="Clicka el botón para hacer algo"
-        />
-      </Fragment>
+      <div className="App">
+        <h4>Children Props</h4>
+        <Article
+          date={new Date().toLocaleDateString()}
+          title="Artículo sobre la prop children"
+        >
+          <p>
+            El contenido que envolvemos dentro del componente Article será
+            enviado al componente como this.props.children
+          </p>
+          <strong>
+            Y mantiene las etiquetas y componentes que hayáis añadido dentro
+          </strong>
+        </Article>
+        <Button label="Compartir publicación" borderColor="red" />
+      </div>
     );
   }
 }
